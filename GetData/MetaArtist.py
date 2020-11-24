@@ -24,7 +24,7 @@ for artist in ArtistsIdList:
     genres = ', '.join(artist['genres'])
 
     # Check for special char in the artist name and delete them
-    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':']
+    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':', '"']
     if any(ele in artist['name'] for ele in Special_char):
         for char in Special_char:
             artist['name'] = artist['name'].replace(char, '')
