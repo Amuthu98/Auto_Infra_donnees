@@ -3,7 +3,7 @@ import spotipy
 import datetime
 import pandas as pd
 import os
-from pprint import pprint
+import RmDuplicate
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="855c14116eb64f31a93d97374c6aa1b0",
                                                            client_secret="67e8c03c44ab45d294ddb4227c86aab8"))
@@ -24,7 +24,7 @@ for artist in ArtistsIdList:
     genres = ', '.join(artist['genres'])
 
     # Check for special char in the artist name and delete them
-    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':', '"']
+    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':', '"', '.', ',', '…']
     if any(ele in artist['name'] for ele in Special_char):
         for char in Special_char:
             artist['name'] = artist['name'].replace(char, '')
@@ -43,3 +43,6 @@ for artist in ArtistsIdList:
     # fill the csv with data
     MetaArtist.write(str(today) + ';' + artist['id'] + ';' + artist['name'] + ';' + genres + ';' + str(artist['followers']['total']) + ';' + str(artist['popularity']) + ';' + artist['images'][0]['url'] +'\n')
     MetaArtist.close()
+
+#Remove duplicate get data for artist
+RmDuplicate.rmDuplicate('Data/MetaArtist/')

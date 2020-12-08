@@ -31,7 +31,7 @@ for album in AlbumsIdList:
     available_markets = ', '.join(album['available_markets'])
 
     #Check for special char in the album/artist name and delete them
-    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':', '"']
+    Special_char = ['#', '*', '<', '>', '?', '/', '\\', '|', ':', '"', '.', ',', '…']
     if any(ele in album['name'] for ele in Special_char):
         for char in Special_char:
             album['name'] = album['name'].replace(char, '')
