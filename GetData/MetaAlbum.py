@@ -3,7 +3,7 @@ import spotipy
 import os
 import datetime
 import pandas as pd
-from pprint import pprint
+import RmDuplicate
 
 sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id="855c14116eb64f31a93d97374c6aa1b0",
                                                            client_secret="67e8c03c44ab45d294ddb4227c86aab8"))
@@ -40,16 +40,19 @@ for album in AlbumsIdList:
             album['artists'][0]['name'] = album['artists'][0]['name'].replace(char, '')
 
     #Check if folder already exist (yes : continue / no : create folder)
-    if not os.path.exists('Data/MetaAlbum/'+album['name']+' - '+album['artists'][0]['name']):
-        os.makedirs('Data/MetaAlbum/'+album['name']+' - '+album['artists'][0]['name'])
+    if not os.path.exists('Data/MetaAlbum/'+album['id']):
+        os.makedirs('Data/MetaAlbum/'+album['id'])
 
     #Open CSV MetaAlbum
-    MetaAlbum = open('Data/MetaAlbum/'+album['name']+' - '+album['artists'][0]['name']+'/'+album['id']+'.csv', 'a', encoding='utf-8')
+    MetaAlbum = open('Data/MetaAlbum/'+album['id']+'/'+album['id']+'.csv', 'a', encoding='utf-8')
 
     #if the MetaAlbum csv is empty create the header
-    if os.stat('Data/MetaAlbum/'+album['name']+' - '+album['artists'][0]['name']+'/'+album['id']+'.csv').st_size == 0:
+    if os.stat('Data/MetaAlbum/'+album['id']+'/'+album['id']+'.csv').st_size == 0:
         MetaAlbum.write('album_date_extract;album_type;album_id;album_name;album_release_date;album_popularity;album_label;album_image;artist_id;artist_name;tracks;available_markets\n')
 
     #fill the csv with data
     MetaAlbum.write(str(today) + ';' + album['album_type'] + ';' + album['id'] + ';' + album['name'] + ';' + album['release_date'] + ';' + str(album['popularity']) + ';' + album['label'] + ';' + album['images'][0]['url'] + ';' + album['artists'][0]['id'] + ';' + album['artists'][0]['name'] + ';' + TrackList + ';' +available_markets +'\n')
     MetaAlbum.close()
+
+#Remove duplicate get data for album
+RmDuplicate.rmDuplicateAlbum('Data/MetaAlbum/')
